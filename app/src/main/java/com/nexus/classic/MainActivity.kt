@@ -7,7 +7,7 @@ import android.view.Gravity
 import android.widget.*
 class MainActivity : Activity() {
     private val names = listOf("Phone","Messages","Camera","Photos","Settings","Calendar","Clock","Calculator","Contacts","Mail","Browser","Maps","Music","Files","Downloads","Play Store","YouTube","WhatsApp","Instagram","Facebook","Telegram","Spotify","Netflix","Amazon","Chrome","Gmail","Drive","Gallery","Notes","Weather")
-    private val drawables = listOf("nexus_phone","nexus_messages","nexus_camera","nexus_photos","nexus_settings","ic_calendar","ic_clock","ic_calculator","ic_contacts","ic_mail","ic_browser","ic_maps","ic_music","ic_files","ic_downloads","ic_playstore","ic_youtube","ic_whatsapp","ic_instagram","ic_facebook","ic_telegram","ic_spotify","ic_netflix","ic_amazon","ic_chrome","ic_gmail","ic_drive","ic_gallery","ic_notes","ic_weather")
+    private val drawables = listOf("nexus_phone","nexus_messages","nexus_camera","nexus_photos","nexus_settings","classic_calendar","classic_clock","classic_calculator","classic_contacts","classic_mail","classic_browser","classic_maps","classic_music","classic_files","classic_downloads","classic_playstore","classic_youtube","classic_whatsapp","classic_instagram","classic_facebook","classic_telegram","classic_spotify","classic_netflix","classic_amazon","classic_chrome","classic_gmail","classic_drive","classic_gallery","classic_notes","classic_weather")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val root=LinearLayout(this).apply { orientation=LinearLayout.VERTICAL; setPadding(22,28,22,20); setBackgroundColor(Color.rgb(235,238,243)) }
