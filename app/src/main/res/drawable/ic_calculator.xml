@@ -4,5 +4,6 @@
  <path android:fillColor="#56616D" android:pathData="M19,9h58a10,10 0,0 1,10 10v58a10,10 0,0 1,-10 10H19A10,10 0,0 1,9 77V19A10,10 0,0 1,19 9z"/>
  <path android:fillColor="#667F9A" android:pathData="M20,12h56a8,8 0,0 1,8 8v56a8,8 0,0 1,-8 8H20a8,8 0,0 1,-8 -8V20a8,8 0,0 1,8 -8z"/>
  <path android:fillColor="#33FFFFFF" android:pathData="M20,12h56a8,8 0,0 1,8 8v15H12V20a8,8 0,0 1,8 -8z"/>
- <path android:fillColor="#FFFFFFFF" android:pathData="M5 3h14v18H5V3zm3 3h8v3H8V6zm0 6h2v2H8v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zM8 16h2v2H8v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/>
- </vector>
+ <group android:scaleX="3" android:scaleY="3" android:pivotX="12" android:pivotY="12"><path android:fillColor="#FFFFFFFF" android:pathData="M5 3h14v18H5V3zm3 3h8v3H8V6zm0 6h2v2H8v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zM8 16h2v2H8v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/>
+ </group>
+</vector>
