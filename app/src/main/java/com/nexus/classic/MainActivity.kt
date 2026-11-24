@@ -12,8 +12,8 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         val root = LinearLayout(this).apply { orientation=LinearLayout.VERTICAL; setPadding(22,28,22,20); setBackgroundColor(Color.rgb(235,238,243)) }
         root.addView(TextView(this).apply { text="NEXUS Classic"; textSize=28f; setTextColor(Color.rgb(30,39,52)); typeface=Typeface.create("sans-serif",Typeface.BOLD) })
-        root.addView(TextView(this).apply { text="iPhone 4 Evolution  •  First Edition"; textSize=13f; setTextColor(Color.DKGRAY); setPadding(0,4,0,18) })
-        root.addView(TextView(this).apply { text="30 crafted icons"; textSize=17f; typeface=Typeface.DEFAULT_BOLD; setTextColor(Color.rgb(45,55,68)); setPadding(0,8,0,12) })
+        root.addView(TextView(this).apply { text="iPhone 4 Evolution  •  Metallic Edition"; textSize=13f; setTextColor(Color.DKGRAY); setPadding(0,4,0,18) })
+        root.addView(TextView(this).apply { text="iPhone 4 Evolution • Core icon redesign"; textSize=17f; typeface=Typeface.DEFAULT_BOLD; setTextColor(Color.rgb(45,55,68)); setPadding(0,8,0,12) })
         val grid=GridLayout(this).apply { columnCount=3 }
         icons.forEachIndexed { i,n ->
             val tile=LinearLayout(this).apply { orientation=LinearLayout.VERTICAL; gravity=Gravity.CENTER; setPadding(6,10,6,10) }
