@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <item component="ComponentInfo{com.google.android.dialer/com.google.android.dialer.extensions.GoogleDialtactsActivity}" drawable="ic_phone"/>
-  <item component="ComponentInfo{com.android.dialer/com.android.dialer.DialtactsActivity}" drawable="ic_phone"/>
-  <item component="ComponentInfo{com.google.android.apps.messaging/com.google.android.apps.messaging.ui.ConversationListActivity}" drawable="ic_messages"/>
-  <item component="ComponentInfo{com.android.messaging/com.android.messaging.ui.conversationlist.ConversationListActivity}" drawable="ic_messages"/>
-  <item component="ComponentInfo{com.android.camera2/com.android.camera.CameraLauncher}" drawable="ic_camera"/>
-  <item component="ComponentInfo{com.google.android.GoogleCamera/com.android.camera.CameraActivity}" drawable="ic_camera"/>
-  <item component="ComponentInfo{com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}" drawable="ic_photos"/>
-  <item component="ComponentInfo{com.android.settings/com.android.settings.Settings}" drawable="ic_settings"/>
+  <item component="ComponentInfo{com.google.android.dialer/com.google.android.dialer.extensions.GoogleDialtactsActivity}" drawable="nexus_phone"/>
+  <item component="ComponentInfo{com.android.dialer/com.android.dialer.DialtactsActivity}" drawable="nexus_phone"/>
+  <item component="ComponentInfo{com.google.android.apps.messaging/com.google.android.apps.messaging.ui.ConversationListActivity}" drawable="nexus_messages"/>
+  <item component="ComponentInfo{com.android.messaging/com.android.messaging.ui.conversationlist.ConversationListActivity}" drawable="nexus_messages"/>
+  <item component="ComponentInfo{com.android.camera2/com.android.camera.CameraLauncher}" drawable="nexus_camera"/>
+  <item component="ComponentInfo{com.google.android.GoogleCamera/com.android.camera.CameraActivity}" drawable="nexus_camera"/>
+  <item component="ComponentInfo{com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}" drawable="nexus_photos"/>
+  <item component="ComponentInfo{com.android.settings/com.android.settings.Settings}" drawable="nexus_settings"/>
   <item component="ComponentInfo{com.google.android.calendar/com.android.calendar.AllInOneActivity}" drawable="ic_calendar"/>
   <item component="ComponentInfo{com.google.android.deskclock/com.android.deskclock.DeskClock}" drawable="ic_clock"/>
   <item component="ComponentInfo{com.android.calculator2/com.android.calculator2.Calculator}" drawable="ic_calculator"/>
