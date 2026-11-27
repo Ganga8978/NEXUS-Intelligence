@@ -25,9 +25,9 @@ class LivingNatureWallpaperService:WallpaperService(){
  override fun onSurfaceChanged(holder:SurfaceHolder,format:Int,width:Int,height:Int){super.onSurfaceChanged(holder,format,width,height);w=width;h=height;drawScene()}
  override fun onDestroy(){visible=false;handler.removeCallbacks(tick);worker.shutdownNow();super.onDestroy()}
  private fun loadWeather(){worker.execute{try{
- val lm=getSystemService(LOCATION_SERVICE) as LocationManager
- val fine=checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
- val coarse=checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
+ val lm=this@LivingNatureWallpaperService.getSystemService(LOCATION_SERVICE) as LocationManager
+ val fine=this@LivingNatureWallpaperService.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
+ val coarse=this@LivingNatureWallpaperService.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
  var loc:Location?=null
  if(fine||coarse)for(provider in lm.getProviders(true)){try{val x=lm.getLastKnownLocation(provider);if(x!=null&&(loc==null||x.time>loc!!.time))loc=x}catch(_:SecurityException){}}
  if(loc==null){sky="Enable location permission";return@execute}
