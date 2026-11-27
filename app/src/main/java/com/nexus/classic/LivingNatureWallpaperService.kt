@@ -6,6 +6,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
+import android.os.PowerManager
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
 import org.json.JSONObject
@@ -19,8 +20,9 @@ class LivingNatureWallpaperService:WallpaperService(){
  override fun onCreateEngine():Engine=NatureEngine()
  inner class NatureEngine:Engine(){
  private val handler=Handler(Looper.getMainLooper());private val worker=Executors.newSingleThreadExecutor()
- private var visible=false;private var w=0;private var h=0;private var temp="--°";private var sky="Finding local weather";private var humidity="--";private var wind="--";private var sunrise="--:--";private var sunset="--:--";private var rainy=false;private var updated=0L;private val start=System.currentTimeMillis();private val p=Paint(3)
- private val tick=object:Runnable{override fun run(){if(!visible)return;drawScene();handler.postDelayed(this,1200)}}
+ private var visible=false;private var w=0;private var h=0;private var temp="--°";private var sky="Finding local weather";private var humidity="--";private var wind="--";private var sunrise="--:--";private var sunset="--:--";private var rainy=false;private var updated=0L;private var weatherCode=2;private val start=System.currentTimeMillis();private val p=Paint(3)
+ private val powerManager by lazy { this@LivingNatureWallpaperService.getSystemService(POWER_SERVICE) as PowerManager }
+ private val tick=object:Runnable{override fun run(){if(!visible)return;drawScene();val interval=if(powerManager.isPowerSaveMode)66L else 33L;handler.postDelayed(this,interval)}}
  override fun onVisibilityChanged(v:Boolean){visible=v;if(v){if(System.currentTimeMillis()-updated>1800000)loadWeather();handler.removeCallbacks(tick);handler.post(tick)}else handler.removeCallbacks(tick)}
  override fun onSurfaceChanged(holder:SurfaceHolder,format:Int,width:Int,height:Int){super.onSurfaceChanged(holder,format,width,height);w=width;h=height;drawScene()}
  override fun onDestroy(){visible=false;handler.removeCallbacks(tick);worker.shutdownNow();super.onDestroy()}
@@ -33,7 +35,7 @@ class LivingNatureWallpaperService:WallpaperService(){
  if(loc==null){sky="Enable location permission";return@execute}
  val endpoint="https://api.open-meteo.com/v1/forecast?latitude="+loc!!.latitude+"&longitude="+loc!!.longitude+"&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=sunrise,sunset&timezone=auto&forecast_days=1"
  val con=URL(endpoint).openConnection() as HttpURLConnection;con.connectTimeout=9000;con.readTimeout=9000
- val json=JSONObject(con.inputStream.bufferedReader().use{it.readText()});con.disconnect();val cur=json.getJSONObject("current");val day=json.getJSONObject("daily");val code=cur.optInt("weather_code",2)
+ val json=JSONObject(con.inputStream.bufferedReader().use{it.readText()});con.disconnect();val cur=json.getJSONObject("current");val day=json.getJSONObject("daily");val code=cur.optInt("weather_code",2);weatherCode=code
  temp=String.format(Locale.getDefault(),"%.0f°",cur.optDouble("temperature_2m",Double.NaN));humidity=cur.optInt("relative_humidity_2m",-1).toString()+"%";wind=cur.optDouble("wind_speed_10m",0.0).roundToInt().toString()+" km/h"
  sunrise=day.getJSONArray("sunrise").optString(0).takeLast(5);sunset=day.getJSONArray("sunset").optString(0).takeLast(5)
  sky=when(code){0->"Clear sky";1,2,3->"Partly cloudy";45,48->"Misty";in 51..67->"Rain";in 71..77->"Snow";in 80..82->"Showers";in 95..99->"Thunderstorm";else->"Cloudy"}
@@ -55,6 +57,7 @@ class LivingNatureWallpaperService:WallpaperService(){
   val orbX=if(night)W*.77f else W*.19f;val orbY=if(dusk)H*.23f else H*.15f
   p.color=Color.argb(25,255,220,160);c.drawCircle(orbX,orbY,W*.095f,p)
   p.color=if(night)Color.rgb(235,236,215)else Color.rgb(255,219,147);c.drawCircle(orbX,orbY,W*.032f,p)
+  if(weatherCode==45||weatherCode==48||rainy||hour in 5..7){for(i in 0..5){val drift=((t*W*.008f+i*W*.23f)%(W*1.4f))-W*.2f;val fy=H*(.43f+i*.055f);p.color=Color.argb(if(night)12 else 25,235,239,225);c.drawOval(drift,fy,drift+W*.42f,fy+H*.045f,p)}}
   // clouds drift with the real wind
   for(i in 0..4){val x=((i*W*.31f+t*W*(.006f+.018f*breeze))%(W*1.35f))-W*.15f;val y=H*(.11f+(i%3)*.055f)
    p.color=Color.argb(if(night)35 else if(rainy)155 else 75,245,247,239);c.drawOval(x,y,x+W*.20f,y+H*.025f,p);c.drawCircle(x+W*.07f,y,W*.033f,p);c.drawCircle(x+W*.12f,y-H*.012f,W*.04f,p)}
@@ -82,8 +85,8 @@ class LivingNatureWallpaperService:WallpaperService(){
   p.color=Color.rgb(190,126,70);c.drawRoundRect(W*.80f,sy+H*.18f,W*.87f,sy+H*.27f,W*.012f,W*.012f,p)
   p.color=Color.rgb(66,71,67);c.drawRoundRect(W*.82f,sy+H*.14f,W*.86f,sy+H*.19f,W*.015f,W*.015f,p)
   p.color=Color.rgb(201,154,91);c.drawCircle(W*.91f,sy+H*.22f,W*.025f,p);c.drawCircle(W*.96f,sy+H*.22f,W*.025f,p)
-  // warm hanging lantern
-  p.color=Color.argb(38,255,171,73);c.drawCircle(W*.89f,sy+H*.12f,W*.065f,p);p.color=Color.rgb(255,187,87);c.drawRoundRect(W*.878f,sy+H*.09f,W*.902f,sy+H*.15f,W*.008f,W*.008f,p)
+  val glow=(sin(t*3.1f)*.5f+.5f)
+  p.color=Color.argb((28+glow*22).toInt(),255,171,73);c.drawCircle(W*.89f,sy+H*.12f,W*(.055f+glow*.012f),p);p.color=Color.rgb(255,187,87);c.drawRoundRect(W*.878f,sy+H*.09f,W*.902f,sy+H*.15f,W*.008f,W*.008f,p)
   // animated kettle steam
   drawSteam(c,W*.84f,sy+H*.15f,W*.020f,t,1.2f)
   // leafy tree canopy and branch
@@ -95,6 +98,7 @@ class LivingNatureWallpaperService:WallpaperService(){
   for(i in 0..9){val x=((i*W*.137f+t*W*(.018f+.04f*breeze))%(W*1.1f))-W*.05f;val y=H*(.30f+((i*37)%55)/100f)+sin(t*1.8f+i)*H*.018f;p.color=if(i%2==0)Color.rgb(133,153,65)else Color.rgb(74,123,54);c.save();c.rotate(sin(t+i)*45f,x,y);c.drawOval(x-W*.009f,y-H*.004f,x+W*.009f,y+H*.004f,p);c.restore()}
   // birds gliding in the distance
   for(i in 0..2){val x=((i*W*.29f+t*W*.025f)%(W*1.15f))-W*.05f;val y=H*(.34f+i*.035f)+sin(t*1.7f+i)*H*.012f;p.color=Color.argb(190,29,37,31);p.style=Paint.Style.STROKE;p.strokeWidth=W*.002f;val wing=Path().apply{moveTo(x-W*.018f,y);quadTo(x-W*.008f,y-H*.012f,x,y);quadTo(x+W*.008f,y-H*.012f,x+W*.018f,y)};c.drawPath(wing,p);p.style=Paint.Style.FILL}
+  if(night){for(i in 0..13){val fx=((i*W*.091f+t*W*(.004f+(i%3)*.001f))%(W*1.08f))-W*.03f;val fy=H*(.42f+(i%7)*.055f)+sin(t*1.5f+i)*H*.012f;val pulse=(sin(t*2.2f+i)*.5f+.5f);p.color=Color.argb((70+pulse*120).toInt(),255,218,129);c.drawCircle(fx,fy,W*.0025f,p);p.color=Color.argb((12+pulse*20).toInt(),255,198,93);c.drawCircle(fx,fy,W*.012f,p)}}
   // rain only in real rain; animated diagonal drops and puddle ripples
   if(rainy){p.color=Color.argb(115,213,231,240);p.strokeWidth=W*.0017f;for(i in 0..44){val x=(i*53f+t*W*.16f)%W;val y=(i*91f+t*H*.34f)%(H*.78f);c.drawLine(x,y,x-W*.008f,y+H*.022f,p)};for(i in 0..5){val x=W*(.12f+i*.075f);val y=H*(.91f+(i%2)*.025f);val r=((t*W*.012f+i*W*.015f)% (W*.04f));p.color=Color.argb(85,224,235,224);p.style=Paint.Style.STROKE;c.drawCircle(x,y,r,p);p.style=Paint.Style.FILL}}
   // weather and local conditions overlay
@@ -110,7 +114,7 @@ class LivingNatureWallpaperService:WallpaperService(){
   p.style=Paint.Style.FILL;p.color=old
  }
  private fun drawTeaDrinker(c:Canvas,W:Float,H:Float,t:Float,breeze:Float){
-  val breath=sin(t*1.25f)*H*.002f;val lean=sin(t*.42f)*W*.002f
+  val breath=sin(t*1.25f)*H*.0035f;val lean=sin(t*.42f)*W*.002f
   val cx=W*.57f+lean;val headY=H*.66f+breath
   // bench behind body
   p.color=Color.rgb(103,68,43);c.drawRoundRect(W*.39f,H*.79f,W*.76f,H*.815f,W*.008f,W*.008f,p);c.drawRect(W*.42f,H*.81f,W*.44f,H*.94f,p);c.drawRect(W*.70f,H*.81f,W*.72f,H*.94f,p)
@@ -129,7 +133,7 @@ class LivingNatureWallpaperService:WallpaperService(){
   for(i in 0..6){val root=cx-W*.035f+i*W*.011f;val lift=sin(t*2.0f+i*.8f)*W*.012f*breeze;val hair=Path().apply{moveTo(root,headY-H*.04f);quadTo(root-W*.015f-lift,headY-H*.10f,root-W*.035f-lift,headY-H*(.085f+.018f*breeze))};c.drawPath(hair,p)}
   p.style=Paint.Style.FILL
   // arm reaches toward tea cup, gently moving as he sips
-  val sip=sin(t*.75f)*H*.004f;p.color=Color.rgb(151,105,73);p.strokeWidth=W*.026f;p.strokeCap=Paint.Cap.ROUND
+  val sipCycle=(sin(t*.42f)*.5f+.5f);val sip=if(sipCycle>.88f) -(sipCycle-.88f)*H*.30f else sin(t*.75f)*H*.002f;p.color=Color.rgb(151,105,73);p.strokeWidth=W*.026f;p.strokeCap=Paint.Cap.ROUND
   c.drawLine(cx+W*.035f,H*.715f,cx+W*.09f,H*.68f+sip,p);c.drawLine(cx+W*.09f,H*.68f+sip,cx+W*.07f,H*.635f+sip,p)
   // cup in hand with hot tea
   p.color=Color.rgb(207,143,78);c.drawRoundRect(cx+W*.048f,H*.61f+sip,cx+W*.085f,H*.65f+sip,W*.006f,W*.006f,p)
