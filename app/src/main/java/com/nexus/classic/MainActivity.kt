@@ -10,8 +10,6 @@ import android.graphics.Typeface
 import android.graphics.Color
 import android.view.Gravity
 import android.widget.*
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 class MainActivity:Activity(){
  private val names=listOf("Phone","Messages","Camera","Photos","Settings","Calendar","Clock","Calculator","Contacts","Mail","Browser","Maps","Music","Files","Downloads","Play Store","YouTube","WhatsApp","Instagram","Facebook","Telegram","Spotify","Netflix","Amazon","Chrome","Gmail","Drive","Gallery","Notes","Weather")
  private val icons=listOf("nexus_phone","nexus_messages","nexus_camera","nexus_photos","nexus_settings","classic_calendar","classic_clock","classic_calculator","classic_contacts","classic_mail","classic_browser","classic_maps","classic_music","classic_files","classic_downloads","classic_playstore","classic_youtube","classic_whatsapp","classic_instagram","classic_facebook","classic_telegram","classic_spotify","classic_netflix","classic_amazon","classic_chrome","classic_gmail","classic_drive","classic_gallery","classic_notes","classic_weather")
@@ -27,8 +25,8 @@ class MainActivity:Activity(){
  val grid=GridLayout(this).apply{columnCount=3}
  names.forEachIndexed{i,n->val tile=LinearLayout(this).apply{orientation=1;gravity=Gravity.CENTER;setPadding(6,10,6,10)};val id=resources.getIdentifier(icons[i],"drawable",packageName);tile.addView(ImageView(this).apply{setImageResource(id);layoutParams=LinearLayout.LayoutParams(76,76)});tile.addView(TextView(this).apply{text=n;textSize=11f;setTextColor(Color.rgb(45,55,68));gravity=Gravity.CENTER});grid.addView(tile,GridLayout.LayoutParams().apply{width=0;height=GridLayout.LayoutParams.WRAP_CONTENT;columnSpec=GridLayout.spec(GridLayout.UNDEFINED,1f)})}
  root.addView(grid);setContentView(ScrollView(this).apply{addView(root)})
- val f=ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
- val c=ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
- if(!f&&!c)ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION),71)
+ val f=checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
+ val c=checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
+ if(!f&&!c)requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION),71)
  }
 }
