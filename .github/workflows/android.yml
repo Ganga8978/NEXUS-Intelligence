@@ -1,8 +1,8 @@
-name: Build NEXUS Classic APK
+name: Build NEXUS Living Nature APK
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ feature/nexus-living-nature ]
     paths: [ 'app/**', '*.gradle.kts', 'gradle.properties', '.github/workflows/android.yml' ]
 permissions:
   contents: read
@@ -20,7 +20,7 @@ jobs:
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:
-          name: NEXUS-Classic-APK
+          name: NEXUS-Living-Nature-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
