@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
-import androidx.core.content.ContextCompat
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -27,8 +26,8 @@ class LivingNatureWallpaperService:WallpaperService(){
  override fun onDestroy(){visible=false;handler.removeCallbacks(tick);worker.shutdownNow();super.onDestroy()}
  private fun loadWeather(){worker.execute{try{
  val lm=getSystemService(LOCATION_SERVICE) as LocationManager
- val fine=ContextCompat.checkSelfPermission(this@LivingNatureWallpaperService,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
- val coarse=ContextCompat.checkSelfPermission(this@LivingNatureWallpaperService,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
+ val fine=checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
+ val coarse=checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
  var loc:Location?=null
  if(fine||coarse)for(provider in lm.getProviders(true)){try{val x=lm.getLastKnownLocation(provider);if(x!=null&&(loc==null||x.time>loc!!.time))loc=x}catch(_:SecurityException){}}
  if(loc==null){sky="Enable location permission";return@execute}
