@@ -48,7 +48,7 @@ class LivingNatureWallpaperService:WallpaperService(){
  for(i in 0..3){val x=((i*W*.39f+t*(2f+i*.3f))%(W*1.3f))-W*.15f;val y=H*(.13f+i*.07f);p.color=if(night)Color.argb(65,195,207,207)else Color.argb(if(rainy)145 else 85,246,247,239);c.drawOval(x,y,x+W*.23f,y+H*.035f,p);c.drawCircle(x+W*.08f,y-W*.01f,W*.04f,p)}
  p.color=if(night)Color.rgb(31,55,56)else Color.rgb(76,113,91);val hill=Path().apply{moveTo(0f,H*.57f);cubicTo(W*.2f,H*.43f,W*.34f,H*.55f,W*.53f,H*.48f);cubicTo(W*.72f,H*.4f,W*.84f,H*.54f,W,H*.46f);lineTo(W,H);lineTo(0f,H);close()};c.drawPath(hill,p)
  p.color=if(night)Color.rgb(18,43,39)else Color.rgb(40,83,59);val road=Path().apply{moveTo(W*.39f,H*.59f);lineTo(W*.52f,H*.59f);cubicTo(W*.58f,H*.72f,W*.28f,H*.84f,W*.06f,H);lineTo(0f,H);cubicTo(W*.22f,H*.83f,W*.48f,H*.72f,W*.39f,H*.59f);close()};c.drawPath(road,p)
- p.color=Color.argb(95,239,227,183);c.drawLine(W*.45f,H*.61f,W*.18f,H,W*.007f,p)
+ p.color=Color.argb(95,239,227,183);p.strokeWidth=W*.007f;c.drawLine(W*.45f,H*.61f,W*.18f,H,p)
  val sx=W*.63f;val sy=H*.48f;p.color=if(night)Color.rgb(24,46,40)else Color.rgb(39,79,61);c.drawRect(sx,sy+H*.06f,W,sy+H*.39f,p)
  p.color=Color.rgb(77,55,39);val roof=Path().apply{moveTo(sx-W*.04f,sy+H*.07f);lineTo(W,sy-H*.015f);lineTo(W,sy+H*.045f);lineTo(sx,sy+H*.13f);close()};c.drawPath(roof,p)
  p.color=Color.argb(220,255,190,93);c.drawCircle(W*.88f,sy+H*.15f,W*.012f,p);p.color=Color.argb(45,255,177,75);c.drawCircle(W*.88f,sy+H*.15f,W*.055f,p)
