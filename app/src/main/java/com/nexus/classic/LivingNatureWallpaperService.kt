@@ -43,9 +43,9 @@ class LivingNatureWallpaperService:WallpaperService(){
  }catch(_:Exception){sky="Weather temporarily unavailable"}}}
  private fun drawScene(){var c:Canvas?=null;try{c=surfaceHolder.lockCanvas()?:return;if(w<=0||h<=0){w=c.width;h=c.height};render(c)}catch(_:Exception){}finally{if(c!=null)try{surfaceHolder.unlockCanvasAndPost(c)}catch(_:Exception){}}}
  private fun render(c:Canvas){
-  val W=w.toFloat();val H=h.toFloat();val t=(System.currentTimeMillis()-startTime)/1000f
+  val W=w.toFloat();val H=h.toFloat();val t=(System.currentTimeMillis()-start)/1000f
   val hour=Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-  val sceneName=when { rainy -> "nexus_rain"; hour in 5..7 || hour in 17..18 -> "nexus_dusk"; hour<5 || hour>=19 -> "nexus_dusk"; else -> "nexus_day" }
+  val sceneName="nexus_scene"
   val resId=resources.getIdentifier(sceneName,"drawable",packageName)
   val bitmap=if(resId!=0) BitmapFactory.decodeResource(resources,resId) else null
   if(bitmap!=null){
